@@ -6,7 +6,7 @@
     <artifactId>vaadin-signaturefield</artifactId>
     <packaging>bundle</packaging>
     <version>2.0.0</version>
-    
+
     <name>SignatureField</name>
     <description>Vaadin field to capture signatures.</description>
     <url>https://github.com/maxschuster/Vaadin-SignatureField</url>
@@ -30,12 +30,12 @@
         <Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
         <Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
     </properties>
-    
+
     <organization>
         <name>Max Schuster</name>
         <url>https://github.com/maxschuster/</url>
     </organization>
-    
+
     <developers>
         <developer>
             <name>Max Schuster</name>
@@ -64,7 +64,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -88,7 +88,7 @@
             <version>${vaadin.version}</version>
             <scope>provided</scope>
         </dependency>
-		
+
         <!-- This can be replaced with TestNG or some other test framework supported by the surefire plugin -->
         <dependency>
             <groupId>junit</groupId>
@@ -122,7 +122,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>pl.allegro</groupId>
                 <artifactId>grunt-maven-plugin</artifactId>
@@ -164,11 +164,12 @@
                             <!-- Package format version - do not change -->
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                             <Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
+                            <Vaadin-Widgetsets>eu.maxschuster.vaadin.signaturefield.WidgetSet</Vaadin-Widgetsets>
                         </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
-			
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -223,7 +224,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.14.1</version>
             </plugin>
-            
+
             <!-- OSGi -->
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -257,12 +258,12 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            
-            
+
+
+
         </plugins>
 
-        <!-- This is needed for the sources required by the client-side compiler to be 
+        <!-- This is needed for the sources required by the client-side compiler to be
         included in the produced JARs -->
         <resources>
             <resource>
@@ -281,9 +282,9 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-		
+
     </build>
-    
+
     <profiles>
         <profile>
             <id>ossrh</id>
