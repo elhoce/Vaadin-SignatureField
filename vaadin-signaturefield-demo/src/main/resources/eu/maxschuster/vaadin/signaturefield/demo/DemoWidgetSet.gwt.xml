@@ -34,4 +34,6 @@
     <inherits name="com.vaadin.v7.Vaadin7WidgetSet" />
 
     <inherits name="eu.maxschuster.vaadin.signaturefield.WidgetSet" />
+
+    
 </module>
