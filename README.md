@@ -1,6 +1,7 @@
 SignatureField
 ==============
-Forked from Max Schuster
+Forked from Max Schuster component
+Thanks for Slawek Mikula contribution
 
 A Vaadin Field&lt;String&gt; to capture signatures.
 Its value is the data url from the html canvas as simple String.
