@@ -5,7 +5,7 @@
     <groupId>com.adms.core</groupId>
     <artifactId>vaadin-signaturefield-demo</artifactId>
     <packaging>war</packaging>
-    <version>2.0.7</version>
+    <version>2.0.8</version>
     <name>SignatureField (Demo)</name>
 
     <properties>
@@ -77,8 +77,8 @@
         </dependency>
         <dependency>
             <groupId>com.adms.core</groupId>
-            <artifactId>vaadin-signaturefield</artifactId>
-            <version>2.0.7</version>
+            <artifactId>vaadin-signaturefield-v8</artifactId>
+            <version>2.0.8</version>
         </dependency>
         <dependency>
             <groupId>eu.maxschuster</groupId>

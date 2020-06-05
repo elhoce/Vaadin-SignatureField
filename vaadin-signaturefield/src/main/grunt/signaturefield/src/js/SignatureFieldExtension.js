@@ -29,7 +29,7 @@
  * @author Max Schuster
  * @returns {undefined}
  */
-function eu_maxschuster_vaadin_signaturefield_SignatureFieldExtension() {
+function com_adms_core_signaturefield_SignatureFieldExtension() {
 
     "use strict";
     

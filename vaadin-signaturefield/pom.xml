@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.adms.core</groupId>
-    <artifactId>vaadin-signaturefield</artifactId>
+    <artifactId>vaadin-signaturefield-v8</artifactId>
     <packaging>bundle</packaging>
-    <version>2.0.7</version>
+    <version>2.0.8</version>
 
-    <name>SignatureField</name>
+    <name>SignatureFieldv8</name>
     <description>Vaadin field to capture signatures.</description>
-    <url>https://github.com/maxschuster/Vaadin-SignatureField</url>
+    <url>https://github.com/elhoce/Vaadin-SignatureField</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,8 +32,8 @@
     </properties>
 
     <organization>
-        <name>Max Schuster</name>
-        <url>https://github.com/maxschuster/</url>
+        <name>Hocine AMROUCHE</name>
+        <url>https://github.com/elhoce/</url>
     </organization>
 
     <developers>
@@ -43,18 +43,24 @@
             <url>https://github.com/maxschuster</url>
             <id>maxschuster</id>
         </developer>
+        <developer>
+            <name>Hocine AMROUCHE</name>
+            <email>hocine.amrouche@adms.aero</email>
+            <url>https://github.com/elhoce</url>
+            <id>elhoce</id>
+        </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/maxschuster/Vaadin-SignatureField.git</url>
-        <connection>scm:git:https://github.com/maxschuster/Vaadin-SignatureField.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:maxschuster/Vaadin-SignatureField.git</developerConnection>
+        <url>https://github.com/elhoce/Vaadin-SignatureField.git</url>
+        <connection>scm:git:https://github.com/elhoce/Vaadin-SignatureField.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:elhoce/Vaadin-SignatureField.git</developerConnection>
         <tag>${project.version}}</tag>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/maxschuster/Vaadin-SignatureField/issues</url>
+        <url>https://github.com/elhoce/Vaadin-SignatureField/issues</url>
     </issueManagement>
 
     <licenses>
@@ -235,7 +241,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>
-                            !eu.maxschuster.vaadin.signaturefield.client,
+                            !com.adms.core.signaturefield.client,
                             eu.maxschuster.vaadin.signaturefield,
                             eu.maxschuster.vaadin.signaturefield.converter,
                             eu.maxschuster.vaadin.signaturefield.shared
@@ -258,8 +264,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
 
         <!-- This is needed for the sources required by the client-side compiler to be
@@ -318,5 +322,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
