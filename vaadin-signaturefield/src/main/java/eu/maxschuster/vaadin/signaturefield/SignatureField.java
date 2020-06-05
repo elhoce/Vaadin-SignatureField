@@ -15,110 +15,53 @@
  */
 package eu.maxschuster.vaadin.signaturefield;
 
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.data.Validator;
-import com.vaadin.v7.data.util.converter.Converter;
 import com.vaadin.ui.Component;
-import com.vaadin.v7.ui.CustomField;
-import com.vaadin.v7.ui.Field;
+import com.vaadin.ui.CustomField;
 import com.vaadin.ui.declarative.DesignAttributeHandler;
 import com.vaadin.ui.declarative.DesignContext;
-import eu.maxschuster.dataurl.DataUrl;
-import eu.maxschuster.vaadin.signaturefield.converter.StringToDataUrlConverter;
-
 import eu.maxschuster.vaadin.signaturefield.shared.MimeType;
-import java.util.Collection;
-import java.util.logging.Logger;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 
-/**
- * A {@link Field} to capture user signatures as data url {@link String}.<br>
- * <br>
- * If you need extended access to the data urls content you can use the
- * {@link StringToDataUrlConverter} that converts the String value to
- * {@link DataUrl} that allows access to the binary contents of the data url.
- * <br>
- * <br>
- * <a href="https://github.com/szimek/signature_pad">signature_pad</a> 
- * by Szymon Nowak (<a href="https://github.com/szimek">szimek</a>) is used to
- * capture the signature at the client-side.
- * 
- * @author Max Schuster
- * @see StringToDataUrlConverter
- * @see DataUrl
- * @see <a href="https://github.com/szimek/signature_pad">signature_pad</a>
- */
+import java.util.Collection;
+import java.util.logging.Logger;
+
 public class SignatureField extends CustomField<String> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * The extension instance
      */
     private final SignatureFieldExtension extension;
-    
+
     /**
      * True if client-side is updating the signature
      */
     private boolean changingVariables = false;
+    private String value;
 
     /**
      * Creates a new SignatureField instance
      */
     public SignatureField() {
-        this(null, null);
+        this(null);
     }
-    
-    /**
-     * Creates a new SignatureField instance with a caption
-     * 
-     * @param caption 
-     *          Field caption
-     */
-    public SignatureField(String caption) {
-        this(caption, null);
-    }
-    
-    /**
-     * Creates a new SignatureField instance with a data source
-     * 
-     * @param dataSource 
-     *          Property data source
-     */
-    public SignatureField(Property<?> dataSource) {
-        this(null, dataSource);
-    }
-    
-    /**
-     * Creates a new SignatureField instance with a caption and data source
-     * 
-     * @param caption 
-     *          Field caption
-     * @param dataSource 
-     *          Property data source
-     */
-    public SignatureField(String caption, Property<?> dataSource) {
-        super();
-        
-        extension = initExtension();
 
-        setImmediate(false);
+    public SignatureField(String caption) {
+        super();
+
+        extension = initExtension();
         setHeight(100, Unit.PIXELS);
         setWidth(300, Unit.PIXELS);
-        
-        setCaption(caption);
-        setPropertyDataSource(dataSource);
-        setPrimaryStyleName("signaturefield");
-    }
 
-    @Override
-    public Class<? extends String> getType() {
-        return String.class;
+        setCaption(caption);
+        setPrimaryStyleName("signaturefield");
     }
 
     /**
      * Allways returns <code>null</code>
+     *
      * @return Allways <code>null</code>
      */
     @Override
@@ -128,22 +71,24 @@ public class SignatureField extends CustomField<String> {
 
     /**
      * Allways returns <code>null</code>
+     *
      * @return Allways <code>null</code>
      */
     @Override
     protected Component getContent() {
         return null;
     }
-    
+
     /**
      * Creates the javascript extension used to communicate with the
      * client-side.
+     *
      * @return The extension of this field
      */
     private SignatureFieldExtension initExtension() {
         SignatureFieldExtension ext = new SignatureFieldExtension(this);
         ext.addSignatureChangeListener(new SignatureFieldExtension.SignatureChangeListener() {
-            
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -166,16 +111,15 @@ public class SignatureField extends CustomField<String> {
     }
 
     @Override
-    public void setImmediate(boolean immediate) {
-        super.setImmediate(immediate);
-        extension.setImmediate(immediate);
+    public String getValue() {
+        return this.value;
     }
 
     /**
      * Is the field empty?<br>
      * The field is considered empty if its value
      * is {@code null}
-     * 
+     *
      * @return Is the field empty?
      */
     @Override
@@ -184,32 +128,8 @@ public class SignatureField extends CustomField<String> {
     }
 
     /**
-     * Sets the internal field value. Sends the value to the client-side.
-     * 
-     * @param newValue
-     *            the new value to be set.
-     */
-    @Override
-    protected void setInternalValue(String newValue) {
-        setInternalValue(newValue, false);
-    }
-    
-    /**
-     * Sets the internal field value. May sends the value to the client-side.
-     * 
-     * @param newValue
-     *            the new value to be set.
-     * @param repaintIsNotNeeded
-     *            the new value should not be send to the client-side
-     */
-    protected void setInternalValue(String newValue, boolean repaintIsNotNeeded) {
-        super.setInternalValue(newValue);
-        extension.setSignature(newValue, changingVariables || repaintIsNotNeeded);
-    }
-
-    /**
      * Clears the field.
-     * 
+     *
      * @see #setValue(java.lang.Object)
      */
     @Override
@@ -220,7 +140,7 @@ public class SignatureField extends CustomField<String> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.vaadin.ui.AbstractComponent#readDesign(org.jsoup.nodes .Element,
      * com.vaadin.ui.declarative.DesignContext)
      */
@@ -231,7 +151,7 @@ public class SignatureField extends CustomField<String> {
         if (attr.hasKey("mime-type")) {
             MimeType mimeType = null;
             String mimeTypeString = DesignAttributeHandler.getFormatter().parse(
-                     attr.get("mime-type"), String.class);
+                    attr.get("mime-type"), String.class);
             try {
                 mimeType = MimeType.valueOfMimeType(mimeTypeString);
             } catch (IllegalArgumentException e) {
@@ -265,9 +185,14 @@ public class SignatureField extends CustomField<String> {
         a.add("mime-type");
         return a;
     }
-    
-    
-    
+
+    @Override
+    protected void doSetValue(String newValue) {
+        this.value = newValue;
+        extension.setSignature(this.value, changingVariables);
+    }
+
+
     /**
      * Gets the radius of a single dot.
      *
@@ -423,7 +348,7 @@ public class SignatureField extends CustomField<String> {
     public void setPenColor(String penColor) {
         extension.setPenColor(penColor);
     }
-    
+
     /**
      * Sets the color used to draw the lines. Can be any color format accepted
      * by context.fillStyle.<br>
@@ -455,7 +380,7 @@ public class SignatureField extends CustomField<String> {
     public void setVelocityFilterWeight(double velocityFilterWeight) {
         extension.setVelocityFilterWeight(velocityFilterWeight);
     }
-    
+
     /**
      * Sets the velocity filter weight
      *
@@ -484,7 +409,7 @@ public class SignatureField extends CustomField<String> {
     public void setMimeType(MimeType mimeType) {
         extension.setMimeType(mimeType);
     }
-    
+
     /**
      * Sets the {@link MimeType} of generated images
      *
@@ -509,61 +434,29 @@ public class SignatureField extends CustomField<String> {
      * Sets the visibility of the clear button
      *
      * @param clearButtonEnabled Should show a clear button in the
-     * {@link SignatureField}
+     *                           {@link SignatureField}
      */
     public void setClearButtonEnabled(boolean clearButtonEnabled) {
         extension.setClearButtonEnabled(clearButtonEnabled);
     }
-    
+
     /**
      * Sets the visibility of the clear button
      *
      * @param clearButtonEnabled Should show a clear button in the
-     * {@link SignatureField}
+     *                           {@link SignatureField}
      * @return This {@link SignatureField}
      */
     public SignatureField withClearButtonEnabled(boolean clearButtonEnabled) {
         setClearButtonEnabled(clearButtonEnabled);
         return this;
     }
-    /**
-     * Sets the error that is shown if the field value cannot be converted to
-     * the data source type. If {0} is present in the message, it will be
-     * replaced by the simple name of the data source type. If {1} is present in
-     * the message, it will be replaced by the ConversionException message.
-     * 
-     * @param valueConversionError Message to be shown when conversion of the 
-     * value fails
-     * @return This {@link SignatureField}
-     * @see #setConversionError(java.lang.String) 
-     * @see #setImmediate(boolean) 
-     */
-    public SignatureField withConversionError(String valueConversionError) {
-        setImmediate(true);
-        setConversionError(valueConversionError);
-        return this;
-    }
 
     /**
-     * Sets the converter used to convert the field value to property data
-     * source type. The converter must have a presentation type that matches the
-     * field type.
-     * 
-     * @param converter The new converter to use.
+     * Sets the width of the object to "100%".
+     *
      * @return This {@link SignatureField}
-     * @see #setConverter(com.vaadin.data.util.converter.Converter) 
-     * @see #setImmediate(boolean) 
-     */
-    public SignatureField withConverter(Converter<String, ?> converter) {
-        setImmediate(true);
-        setConverter(converter);
-        return this;
-    }
-
-    /**
-     * Sets the width of the object to "100%". 
-     * @return This {@link SignatureField}
-     * @see #setWidth(float, com.vaadin.server.Sizeable.Unit) 
+     * @see #setWidth(float, com.vaadin.server.Sizeable.Unit)
      */
     public SignatureField withFullWidth() {
         setWidth(100f, Unit.PERCENTAGE);
@@ -572,19 +465,20 @@ public class SignatureField extends CustomField<String> {
 
     /**
      * Sets the height of the object to "100%".
+     *
      * @return This {@link SignatureField}
-     * @see #setHeight(float, com.vaadin.server.Sizeable.Unit)  
+     * @see #setHeight(float, com.vaadin.server.Sizeable.Unit)
      */
     public SignatureField withFullHeight() {
         setHeight(100f, Unit.PERCENTAGE);
         return this;
     }
-    
+
     /**
      * Changes the readonly state and throw read-only status change events.
-     * 
+     *
      * @param readOnly a boolean value specifying whether the component is put
-     * read-only mode or not
+     *                 read-only mode or not
      * @return This {@link SignatureField}
      * @see #setReadOnly(boolean)
      */
@@ -594,40 +488,26 @@ public class SignatureField extends CustomField<String> {
     }
 
     /**
-     * Adds a new validator for the field's value. All validators added to a
-     * field are checked each time the its value changes.
-     * 
-     * @param validator the new validator to be added.
-     * @return This {@link SignatureField}
-     * @see #addValidator(com.vaadin.v7.data.Validator) 
-     */
-    public SignatureField withValidator(Validator validator) {
-        setImmediate(true);
-        addValidator(validator);
-        return this;
-    }
-
-    /**
      * Sets the width of the object. Negative number implies unspecified size
      * (terminal is free to set the size).
-     * 
+     *
      * @param width the width of the object.
-     * @param unit the unit used for the width.
+     * @param unit  the unit used for the width.
      * @return This {@link SignatureField}
-     * @see #setWidth(float, com.vaadin.server.Sizeable.Unit) 
+     * @see #setWidth(float, com.vaadin.server.Sizeable.Unit)
      */
     public SignatureField withWidth(float width, Unit unit) {
         setWidth(width, unit);
         return this;
     }
-    
+
     /**
      * Sets the width of the component using String presentation.
-     * 
+     *
      * @param width in CSS style string representation, null or empty string to
-     * reset
+     *              reset
      * @return This {@link SignatureField}
-     * @see #setWidth(java.lang.String) 
+     * @see #setWidth(java.lang.String)
      */
     public SignatureField withWidth(String width) {
         setWidth(width);
@@ -637,11 +517,11 @@ public class SignatureField extends CustomField<String> {
     /**
      * Sets the height of the object. Negative number implies unspecified size
      * (terminal is free to set the size).
-     * 
+     *
      * @param height the height of the object.
-     * @param unit the unit used for the width.
+     * @param unit   the unit used for the width.
      * @return This {@link SignatureField}
-     * @see #setHeight(float, com.vaadin.server.Sizeable.Unit) 
+     * @see #setHeight(float, com.vaadin.server.Sizeable.Unit)
      */
     public SignatureField withHeight(float height, Unit unit) {
         setHeight(height, unit);
@@ -650,14 +530,13 @@ public class SignatureField extends CustomField<String> {
 
     /**
      * Sets the height of the component using String presentation.
-     * 
+     *
      * @param height Height of the component
      * @return This {@link SignatureField}
-     * @see #setHeight(java.lang.String) 
+     * @see #setHeight(java.lang.String)
      */
     public SignatureField withHeight(String height) {
         setHeight(height);
         return this;
     }
-
 }
