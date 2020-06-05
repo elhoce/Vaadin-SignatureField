@@ -1,5 +1,6 @@
 SignatureField
 ==============
+Forked from Max Schuster
 
 A Vaadin Field&lt;String&gt; to capture signatures.
 Its value is the data url from the html canvas as simple String.
@@ -7,56 +8,30 @@ Its value is the data url from the html canvas as simple String.
 to capture the signature at the client-side.
 
 ## Requirements
-* Vaadin 7.4+
-
-## Demo
-[http://maxschuster.jelastic.servint.net/SignatureField/](http://maxschuster.jelastic.servint.net/SignatureField/)
+* Vaadin 8.8+
 
 ## Usage
 ### Simple
 ``` java
-FormLayout layout = new FormLayout();
+import com.adms.core.signaturefield.SignatureField;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.VerticalLayout;
 
-SignatureField signatureField = new SignatureField();
-signatureField.setWidth("350px");
-signatureField.setHeight("150px");
+public class TestSignatureField extends VerticalLayout {
+    private final SignatureField sign;
+    private String currentSign = null;
 
-layout.addComponent(signatureField);
-
-signatureField.addValueChangeListener(new ValueChangeListener() {
-	@Override
-	public void valueChange(ValueChangeEvent event) {
-		String signature = (String) event.getProperty().getValue();
-		// do something with the string
-	}
-});
-```
-
-### Using DataURL
-``` java
-
-ObjectProperty<DataURL> dataUrlProperty =
-	new ObjectProperty<DataURL>(null, DataURL.class);
-
-FormLayout layout = new FormLayout();
-
-SignatureField signatureField = new SignatureField();
-signatureField.setWidth("350px");
-signatureField.setHeight("150px");
-signatureField.setConverter(new StringToDataURLConverter());
-signatureField.setPropertyDataSource(dataUrlProperty);
-
-layout.addComponent(signatureField);
-
-dataUrlProperty.addValueChangeListener(new ValueChangeListener() {
-	@Override
-	public void valueChange(ValueChangeEvent event) {
-		final DataURL signature = (DataURL) event.getProperty().getValue();
-		String mimeType = signature.getAppliedMimeType();
-		byte[] data = signature.getData();
-		// do something with the data
-	}	
-});
+    public TestSignatureField() {
+        sign = new SignatureField();
+        sign.setWidth(300, Unit.PIXELS);
+        sign.setHeight(200, Unit.PIXELS);
+        sign.setCaption("New signature");
+        sign.addValueChangeListener(event -> currentSign = event.getValue());
+        Button clear = new Button("refresh");
+        clear.addClickListener(onClick -> sign.clear());
+        addComponents(sign, clear);
+    }
+}
 ```
 
 ## Licence
